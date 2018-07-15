@@ -6,7 +6,6 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    working_directory: /go/src/github.com/johndistasio/responder
     steps:
       - checkout
       - setup_remote_docker:
@@ -21,12 +20,12 @@ jobs:
             GIT_REV="$(git rev-parse --short HEAD)"
             GIT_TAG="$(git describe --tags --always)"
             $(aws ecr get-login --no-include-email)
-            docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/responder:$GIT_REV
-            docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/responder:$GIT_TAG
-            docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/responder:latest
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/responder:$GIT_REV
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/responder:$GIT_TAG
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/responder:latest
+            docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_REV
+            docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_TAG
+            docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:latest
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_REV
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_TAG
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:latest
 
 workflows:
   version: 2
