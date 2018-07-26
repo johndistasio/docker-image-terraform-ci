@@ -7,4 +7,5 @@ RUN apk --no-cache --no-progress add curl unzip \
   && sha256sum -c terraform_0.11.7_SHA256SUMS \
   && unzip -d /usr/local/bin terraform_0.11.7_linux_amd64.zip \
   && rm terraform_0.11.7_linux_amd64.zip \
+  && rm terraform_0.11.7_SHA256SUMS \
   && apk del curl unzip
