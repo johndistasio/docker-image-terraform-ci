@@ -22,7 +22,6 @@ jobs:
             docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_REV
             docker tag terraform-ci $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:latest
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_REV
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:$GIT_TAG
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/terraform-ci:latest
   tag:
     docker:
@@ -32,13 +31,14 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Tag Image
           command: |
             GIT_REV="$(git rev-parse --short HEAD)"
             MANIFEST=$(aws ecr batch-get-image --repository-name terraform-ci --image-ids imageTag="$GIT_REV" --query images[].imageManifest --output text)
             aws ecr put-image --repository-name terraform-ci --image-tag "$CIRCLECI_TAG" --image-manifest "$MANIFEST"
-
 
 workflows:
   version: 2
@@ -48,11 +48,11 @@ workflows:
           context: AWS
           filters:
             branches:
-              only:
-                - master
+              only: master
       - tag :
           context: AWS
           filters:
+            branches:
+              ignore: /.*/
             tags:
-              only:
-                - /^.+/
+              only: /^.+/
