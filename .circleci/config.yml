@@ -38,7 +38,7 @@ jobs:
           command: |
             GIT_REV="$(git rev-parse --short HEAD)"
             MANIFEST=$(aws ecr batch-get-image --repository-name terraform-ci --image-ids imageTag=$GIT_REV --query images[].imageManifest --output text)
-            aws ecr put-image --repository-name terraform-ci --image-tag "$CIRCLECI_TAG" --image-manifest "$MANIFEST"
+            aws ecr put-image --repository-name terraform-ci --image-tag $CIRCLE_TAG --image-manifest "$MANIFEST"
 
 workflows:
   version: 2
